@@ -64,7 +64,7 @@
         let summaryPrice = await callCalculate(rai.value, ngan.value, vaa.value, price.value);
         let buttonCalculate = document.getElementById("buttonCalculate");
         let result = document.getElementById("result");
-        buttonCalculate.classList.add("d-none");
+        // buttonCalculate.classList.add("d-none");
         result.classList.remove("d-none");
         summaryPrice = numberWithCommas(summaryPrice);
         document.getElementById("result").innerHTML += `<h2 class="text-center">${summaryPrice}</h2>`;
