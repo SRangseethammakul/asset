@@ -16,13 +16,21 @@
       <div class="row">
         <div class="col">
           <input class="form-control form-control-lg" type="number" id="rai" placeholder="ไร่" aria-label="ไร่">
-          <input class="form-control form-control-lg mt-2" type="number" id="ngan" placeholder="งาน" aria-label="งาน">
+          <input class="form-control form-control-lg mt-2" pattern="[0-4]*" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" max="4" id="ngan" placeholder="งาน" aria-label="งาน">
           <input class="form-control form-control-lg mt-2" type="number" id="vaa" placeholder="ตารางวา" aria-label="ตารางวา">
-          <input class="form-control form-control-lg mt-2" type="number" id="price" placeholder="ราคา" aria-label="ราคา">
+          <input class="form-control form-control-lg mt-2 mb-2" type="number" id="price" placeholder="ราคา" aria-label="ราคา">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+            <label class="form-check-label" for="inlineRadio1">1</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+            <label class="form-check-label" for="inlineRadio2">2</label>
+          </div>
         </div>
       </div>
       <div id="buttonCalculate" class="d-grid gap-2 col-12 mx-auto mt-3">
-        <button class="btn btn-outline-info" onclick="calculate()" type="button">Button</button>
+        <button class="btn btn-outline-info" onclick="calculate()" type="button">คำนวณราคา</button>
       </div>
       <div id="result" class="d-grid d-none gap-2 col-12 mx-auto mt-3">
       </div>
@@ -60,7 +68,19 @@
         const price = document.getElementById("price");
         if(!rai.value || !ngan.value || !vaa.value || !price.value){
           alert("โปรดใส่ค่า");
+          return 0;
         }
+        if(ngan.value > 4){
+          alert("ต้องไม่เกิน 4");
+          ngan.focus();
+          return 0;
+        }
+        if(vaa.value > 100){
+          alert("ต้องไม่เกิน 100");
+          vaa.focus();
+          return 0;
+        }
+        
         let summaryPrice = await callCalculate(rai.value, ngan.value, vaa.value, price.value);
         let buttonCalculate = document.getElementById("buttonCalculate");
         let result = document.getElementById("result");
