@@ -16,7 +16,7 @@
       <div class="row">
         <div class="col">
           <input class="form-control form-control-lg" type="number" id="rai" placeholder="ไร่" aria-label="ไร่">
-          <input class="form-control form-control-lg mt-2" pattern="[0-4]*" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" max="4" id="ngan" placeholder="งาน" aria-label="งาน">
+          <input class="form-control form-control-lg mt-2" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" max="4" id="ngan" placeholder="งาน" aria-label="งาน">
           <input class="form-control form-control-lg mt-2" type="number" id="vaa" placeholder="ตารางวา" aria-label="ตารางวา">
           <input class="form-control form-control-lg mt-2 mb-2" type="number" id="price" placeholder="ราคา" aria-label="ราคา">
           <div class="form-check form-check-inline">
