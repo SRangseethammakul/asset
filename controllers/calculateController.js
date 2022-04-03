@@ -5,9 +5,21 @@ exports.index = async (req, res, next) => {
     const { rai, ngan, vaa, price } = req.body;
     let summaryVaa =
       Number(rai) * raiToVaa + Number(ngan) * nganToVaa + Number(vaa);
-    let summaryRai = summaryVaa / raiToVaa;
-    let sumPrice = Number(price) * raiToVaa * summaryRai;
-    res.status(200).json(sumPrice);
+    let sumPrice = (Number(price) / raiToVaa) * summaryVaa;
+    let priceAvg = price / raiToVaa;
+    res.status(200).json({ calculatePrice: sumPrice, summaryVaa, priceAvg });
+  } catch (error) {
+    next(error);
+  }
+};
+exports.calculatePerSize = async (req, res, next) => {
+  try {
+    const { rai, ngan, vaa, price } = req.body;
+    let summaryVaa =
+      Number(rai) * raiToVaa + Number(ngan) * nganToVaa + Number(vaa);
+    let avgPrice = ((Number(price) / summaryVaa) * raiToVaa).toFixed(2);
+    let priceAvg = (avgPrice / raiToVaa).toFixed(2);
+    res.status(200).json({ calculatePrice: avgPrice, summaryVaa, priceAvg });
   } catch (error) {
     next(error);
   }

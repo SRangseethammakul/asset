@@ -19,14 +19,11 @@
           <input class="form-control form-control-lg mt-2" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" max="4" id="ngan" placeholder="งาน" aria-label="งาน">
           <input class="form-control form-control-lg mt-2" type="number" id="vaa" placeholder="ตารางวา" aria-label="ตารางวา">
           <input class="form-control form-control-lg mt-2 mb-2" type="number" id="price" placeholder="ราคา" aria-label="ราคา">
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-            <label class="form-check-label" for="inlineRadio1">1</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-            <label class="form-check-label" for="inlineRadio2">2</label>
-          </div>
+          <select class="form-select mt-2" id="typeSelect" aria-label="Default select example">
+            <option selected>เลือกประเภท</option>
+            <option value="1">ราคาต่อไร่</option>
+            <option value="2">ราคารวม</option>
+          </select>
         </div>
       </div>
       <div id="buttonCalculate" class="d-grid gap-2 col-12 mx-auto mt-3">
@@ -41,11 +38,12 @@
       function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       }
-      const callCalculate = (rai, ngan, vaa, price) => {
+      const callCalculate = (rai, ngan, vaa, price, type = 1) => {
+        let url = type == 1 ? `${document.URL}calculate/calculateperprice` : `${document.URL}calculate/calculatepersize`;
         return new Promise((resolve, reject) => {
           axios
             .post(
-              `${document.URL}calculate`,
+              url,
                 {
                   rai,
                   ngan,
@@ -66,12 +64,17 @@
         const ngan = document.getElementById("ngan");
         const vaa = document.getElementById("vaa");
         const price = document.getElementById("price");
+        const type = document.getElementById("typeSelect");
+        if(!type.value){
+          alert("โปรดเลือกประเภท");
+          return 0;
+        }
         if(!rai.value || !ngan.value || !vaa.value || !price.value){
           alert("โปรดใส่ค่า");
           return 0;
         }
-        if(ngan.value > 4){
-          alert("ต้องไม่เกิน 4");
+        if(ngan.value > 3){
+          alert("ต้องไม่เกิน 3");
           ngan.focus();
           return 0;
         }
@@ -81,13 +84,39 @@
           return 0;
         }
         
-        let summaryPrice = await callCalculate(rai.value, ngan.value, vaa.value, price.value);
+        let {calculatePrice, summaryVaa, priceAvg} = await callCalculate(rai.value, ngan.value, vaa.value, price.value, type.value);
         let buttonCalculate = document.getElementById("buttonCalculate");
         let result = document.getElementById("result");
-        // buttonCalculate.classList.add("d-none");
         result.classList.remove("d-none");
-        summaryPrice = numberWithCommas(summaryPrice);
-        document.getElementById("result").innerHTML += `<h2 class="text-center">${summaryPrice}</h2>`;
+        let summaryPrice = numberWithCommas(calculatePrice);
+        let htmeResult = `
+        <hr />
+          <div class="row">
+            <div class="col">
+              <h2>ราคารวม</h2>
+            </div>
+            <div class="col">
+              <h2>${summaryPrice}</h2>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h2>ขนาด</h2>
+            </div>
+            <div class="col">
+              <h2>${summaryVaa}</h2>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h2>ราคาเฉลี่ย</h2>
+            </div>
+            <div class="col">
+              <h2>${priceAvg}</h2>
+            </div>
+          </div>
+        `
+        document.getElementById("result").innerHTML += htmeResult;
       }
       const run = () => {
         console.log(document.URL);

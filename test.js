@@ -1,16 +1,24 @@
-const raiToVaa = 400;
-const nganToVaa = 100;
+const arrInit = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+let arr = [];
+for (const iterator of arrInit) {
+  const person = new Object();
+  person.name = `name ${iterator}`;
+  person.lastname = `name ${iterator}`;
+  arr.push(person);
+}
+console.log(arr);
 
-let rai = 5;
-let ngan = 2;
-let vaa = 89;
-let summaryVaa = rai * raiToVaa + ngan * nganToVaa + vaa;
-let summaryRai = summaryVaa / 400;
-console.log(summaryVaa);
-console.log(summaryRai);
+/*
+class Person {
+  constructor(fname, lname) {
+    this.firstName = fname;
+    this.lastName = lname;
+  }
+}
 
-let pricePerRai = 400000;
-let pricePerVaa = 1000;
+const person = new Person("testFirstName", "testLastName");
 
-let sumPrice = pricePerVaa * raiToVaa * summaryRai;
-console.log(sumPrice);
+console.log(person.firstName); // testFirstName
+console.log(person.lastName); // testLastName
+
+*/
