@@ -15,7 +15,7 @@
     <div class="container">
       <div class="row">
         <div class="col">
-          <input class="form-control form-control-lg" type="number" id="rai" placeholder="ไร่" aria-label="ไร่">
+          <input class="form-control form-control-lg" type="number" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" id="rai" placeholder="ไร่" aria-label="ไร่">
           <input class="form-control form-control-lg mt-2" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" max="4" id="ngan" placeholder="งาน" aria-label="งาน">
           <input class="form-control form-control-lg mt-2" type="number" id="vaa" placeholder="ตารางวา" aria-label="ตารางวา">
           <input class="form-control form-control-lg mt-2 mb-2" type="number" id="price" placeholder="ราคา" aria-label="ราคา">
@@ -37,6 +37,15 @@
     <script>
       function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      function isNumberKey(evt){
+          const charCode = (evt.which) ? evt.which : evt.keyCode
+          if (charCode > 31 && (charCode < 48 || charCode > 57))
+              return false;
+          return true;
+      }
+      const convertToInt = (event) => {
+        console.log(event.charCode);
       }
       const callCalculate = (rai, ngan, vaa, price, type = 1) => {
         let url = type == 1 ? `${document.URL}calculate/calculateperprice` : `${document.URL}calculate/calculatepersize`;
@@ -65,6 +74,10 @@
         const vaa = document.getElementById("vaa");
         const price = document.getElementById("price");
         const type = document.getElementById("typeSelect");
+        if(!Number.isInteger(parseInt(rai.value))){
+          alert("จำนวนไร่ต้องเป็นจำนวนเต็มเท่านั้น");
+          return 0;
+        }
         if(!type.value){
           alert("โปรดเลือกประเภท");
           return 0;
@@ -74,12 +87,12 @@
           return 0;
         }
         if(ngan.value > 3){
-          alert("ต้องไม่เกิน 3");
+          alert("จำนวนงาน ต้องไม่เกิน 3");
           ngan.focus();
           return 0;
         }
-        if(vaa.value > 100){
-          alert("ต้องไม่เกิน 100");
+        if(vaa.value > 99.99){
+          alert("จำนวนวา ต้องไม่เกิน 99.99");
           vaa.focus();
           return 0;
         }
