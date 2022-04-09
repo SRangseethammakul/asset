@@ -10,8 +10,8 @@ exports.index = async (req, res, next) => {
     let priceAvg = (price / raiToVaa).toFixed(2);
     sumPrice = await setNumberformatWithComma(sumPrice);
     priceAvg = await setNumberformatWithComma(priceAvg);
-    summaryVaa = await setNumberformatWithComma(summaryVaa);
-    pricePerRai = await setNumberformatWithComma(price);
+    summaryVaa = await setNumberformatWithComma(parseInt(summaryVaa).toFixed(2));
+    pricePerRai = await setNumberformatWithComma(parseInt(price).toFixed(2));
     res.status(200).json({ calculatePrice: sumPrice, summaryVaa, priceAvg, pricePerRai: pricePerRai });
   } catch (error) {
     next(error);
@@ -26,8 +26,8 @@ exports.calculatePerSize = async (req, res, next) => {
     let priceAvg = (avgPrice / raiToVaa).toFixed(2);
     avgPrice = await setNumberformatWithComma(avgPrice);
     priceAvg = await setNumberformatWithComma(priceAvg);
-    summaryVaa = await setNumberformatWithComma(summaryVaa);
-    newPrice = await setNumberformatWithComma(price);
+    summaryVaa = await setNumberformatWithComma(parseInt(summaryVaa).toFixed(2));
+    newPrice = await setNumberformatWithComma(parseInt(price).toFixed(2));
 
     res.status(200).json({ calculatePrice: newPrice, summaryVaa, priceAvg, pricePerRai :avgPrice });
   } catch (error) {
