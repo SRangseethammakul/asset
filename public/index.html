@@ -81,9 +81,11 @@
         const vaa = document.getElementById("vaa");
         const price = document.getElementById("price");
         const type = document.getElementById("selectType1");
-        const queryResult = document.querySelector(".resultSum");
+        const queryResult = document.querySelectorAll(".resultSum");
         if(queryResult){
-          queryResult.remove();
+          queryResult.forEach(element => {
+            element.remove();
+          });
         }
         if(!Number.isInteger(parseInt(rai.value))){
           alert("จำนวนไร่ต้องเป็นจำนวนเต็มเท่านั้น");
@@ -108,8 +110,7 @@
           return 0;
         }
         let newPrice = price.value.replace(/,/g, '');
-        
-        let {calculatePrice, summaryVaa, priceAvg,pricePerRai} = await callCalculate(rai.value, ngan.value, vaa.value, newPrice, type.checked);
+        let {calculatePrice, summaryVaa, priceAvg, pricePerRai} = await callCalculate(rai.value, ngan.value, vaa.value, newPrice, type.checked);
         let buttonCalculate = document.getElementById("buttonCalculate");
         let result = document.getElementById("result");
         result.classList.remove("d-none");
