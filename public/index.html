@@ -40,6 +40,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
       const isNumberKey = (event) => {
         const charCode = (event.which) ? event.which : event.keyCode;
@@ -88,24 +89,30 @@
           });
         }
         if(!Number.isInteger(parseInt(rai.value))){
-          alert("จำนวนไร่ต้องเป็นจำนวนเต็มเท่านั้น");
-          return 0;
-        }
-        if(!type.value){
-          alert("โปรดเลือกประเภท");
-          return 0;
+          Swal.fire({
+            icon: 'warning',
+            title: 'ไร่ต้องเป็นจำนวนเต็มเท่านั้น',
+          }).then(() => {
+            return 0;
+          });
         }
         if(!rai.value || !ngan.value || !vaa.value || !price.value){
           alert("โปรดใส่ค่า");
           return 0;
         }
         if(ngan.value > 3){
-          alert("จำนวนงาน ต้องไม่เกิน 3");
+          Swal.fire({
+            icon: 'warning',
+            title: "จำนวนงาน ต้องไม่เกิน 3",
+          });
           ngan.focus();
           return 0;
         }
         if(vaa.value > 99.99){
-          alert("จำนวนตารางวา ต้องไม่เกิน 99.99");
+          Swal.fire({
+            icon: 'warning',
+            title: "จำนวนตารางวา ต้องไม่เกิน 99.99",
+          });
           vaa.focus();
           return 0;
         }
