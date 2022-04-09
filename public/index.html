@@ -20,13 +20,16 @@
         <div class="col">
           <input class="form-control form-control-lg" type="number" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" id="rai" placeholder="ไร่" aria-label="ไร่">
           <input class="form-control form-control-lg mt-2" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" max="4" id="ngan" placeholder="งาน" aria-label="งาน">
-          <input class="form-control form-control-lg mt-2" type="number" id="vaa" placeholder="ตารางวา" aria-label="ตารางวา">
-          <input class="form-control form-control-lg mt-2 mb-2" type="number" id="price" placeholder="ราคา" aria-label="ราคา">
-          <select class="form-select mt-2" id="typeSelect" aria-label="Default select example">
-            <option selected>เลือกประเภท</option>
-            <option value="1">ราคาต่อไร่</option>
-            <option value="2">ราคารวม</option>
-          </select>
+          <input class="form-control form-control-lg mt-2 mb-2" type="number" id="vaa" placeholder="ตารางวา" aria-label="ตารางวา">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="selectType1" checked value="1">
+            <label class="form-check-label" for="selectType1">ราคาต่อไร่</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="selectType2" value="2">
+            <label class="form-check-label" for="selectType2">ราคารวม</label>
+          </div>
+          <input class="form-control form-control-lg mt-2 mb-2" type="text" id="price" placeholder="ราคา" aria-label="ราคา">
         </div>
       </div>
       <div id="buttonCalculate" class="d-grid gap-2 col-12 mx-auto mt-3">
@@ -38,19 +41,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-      function numberWithCommas(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      const isNumberKey = (event) => {
+        const charCode = (event.which) ? event.which : event.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+          return false;
+        return true;
       }
-      function isNumberKey(evt){
-          const charCode = (evt.which) ? evt.which : evt.keyCode
-          if (charCode > 31 && (charCode < 48 || charCode > 57))
-              return false;
-          return true;
+      const addcomma = (event) => {
+        const value = event.target.value;
+        event.target.value = value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       }
       const convertToInt = (event) => {
         console.log(event.charCode);
       }
-      const callCalculate = (rai, ngan, vaa, price, type = 1) => {
+      const callCalculate = (rai, ngan, vaa, price, type = true) => {
         let url = type == 1 ? `${document.URL}calculate/calculateperprice` : `${document.URL}calculate/calculatepersize`;
         return new Promise((resolve, reject) => {
           axios
@@ -76,7 +80,11 @@
         const ngan = document.getElementById("ngan");
         const vaa = document.getElementById("vaa");
         const price = document.getElementById("price");
-        const type = document.getElementById("typeSelect");
+        const type = document.getElementById("selectType1");
+        const queryResult = document.querySelector(".resultSum");
+        if(queryResult){
+          queryResult.remove();
+        }
         if(!Number.isInteger(parseInt(rai.value))){
           alert("จำนวนไร่ต้องเป็นจำนวนเต็มเท่านั้น");
           return 0;
@@ -95,46 +103,70 @@
           return 0;
         }
         if(vaa.value > 99.99){
-          alert("จำนวนวา ต้องไม่เกิน 99.99");
+          alert("จำนวนตารางวา ต้องไม่เกิน 99.99");
           vaa.focus();
           return 0;
         }
+        let newPrice = price.value.replace(/,/g, '');
         
-        let {calculatePrice, summaryVaa, priceAvg} = await callCalculate(rai.value, ngan.value, vaa.value, price.value, type.value);
+        let {calculatePrice, summaryVaa, priceAvg,pricePerRai} = await callCalculate(rai.value, ngan.value, vaa.value, newPrice, type.checked);
         let buttonCalculate = document.getElementById("buttonCalculate");
         let result = document.getElementById("result");
         result.classList.remove("d-none");
-        let summaryPrice = numberWithCommas(calculatePrice);
         let htmeResult = `
-        <hr />
-          <div class="row">
-            <div class="col">
-              <h2>ราคารวม</h2>
+          <div class="resultSum">
+            <hr />
+            <div class="row">
+              <div class="col">
+                <h2>ราคารวม</h2>
+              </div>
+              <div class="col">
+                <h2>${calculatePrice}</h2>
+              </div>
+              <div class="col">
+                <h2>บาท</h2>
+              </div>
             </div>
-            <div class="col">
-              <h2>${summaryPrice}</h2>
+            <div class="row">
+              <div class="col">
+                <h2>ขนาด</h2>
+              </div>
+              <div class="col">
+                <h2>${summaryVaa}</h2>
+              </div>
+              <div class="col">
+                <h2>ตารางวา</h2>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <h2>ขนาด</h2>
+            <div class="row">
+              <div class="col">
+                <h2>ราคาเฉลี่ย</h2>
+              </div>
+              <div class="col">
+                <h2>${priceAvg}</h2>
+              </div>
+              <div class="col">
+                <h2>บาทต่อตารางวา</h2>
+              </div>
             </div>
-            <div class="col">
-              <h2>${summaryVaa}</h2>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <h2>ราคาเฉลี่ย</h2>
-            </div>
-            <div class="col">
-              <h2>${priceAvg}</h2>
+            <div class="row">
+              <div class="col">
+                <h2>ราคาเฉลี่ย</h2>
+              </div>
+              <div class="col">
+                <h2>${pricePerRai}</h2>
+              </div>
+              <div class="col">
+                <h2>บาทต่อไร่</h2>
+              </div>
             </div>
           </div>
         `
         document.getElementById("result").innerHTML += htmeResult;
       }
       const run = () => {
+        const price = document.getElementById("price");
+        price.addEventListener("input", addcomma);
         console.log(document.URL);
       }
       run();
