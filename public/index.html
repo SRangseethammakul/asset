@@ -128,50 +128,53 @@
         let result = document.getElementById("result");
         result.classList.remove("d-none");
         let htmeResult = `
-          <div class="resultSum">
+          <div class="container resultSum">
             <hr />
             <div class="row">
               <div class="col">
-                <h2>ราคารวม</h2>
+                <h4>ราคารวม</h4>
               </div>
               <div class="col">
-                <h2>${calculatePrice}</h2>
+                <h4>${calculatePrice}</h4>
               </div>
               <div class="col">
-                <h2>บาท</h2>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <h2>ขนาด</h2>
-              </div>
-              <div class="col">
-                <h2>${summaryVaa}</h2>
-              </div>
-              <div class="col">
-                <h2>ตารางวา</h2>
+                <h4>บาท</h4>
               </div>
             </div>
+            <hr />
             <div class="row">
               <div class="col">
-                <h2>ราคาเฉลี่ย</h2>
+                <h4>ขนาด</h4>
               </div>
               <div class="col">
-                <h2>${priceAvg}</h2>
+                <h4>${summaryVaa}</h4>
               </div>
               <div class="col">
-                <h2>บาทต่อตารางวา</h2>
+                <h4>ตารางวา</h4>
               </div>
             </div>
+            <hr />
             <div class="row">
               <div class="col">
-                <h2>ราคาเฉลี่ย</h2>
+                <h4>ราคาเฉลี่ย</h4>
               </div>
               <div class="col">
-                <h2>${pricePerRai}</h2>
+                <h4>${priceAvg}</h4>
               </div>
               <div class="col">
-                <h2>บาทต่อไร่</h2>
+                <h4>บาทต่อตารางวา</h4>
+              </div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col">
+                <h4>ราคาเฉลี่ย</h4>
+              </div>
+              <div class="col">
+                <h4>${pricePerRai}</h4>
+              </div>
+              <div class="col">
+                <h4>บาทต่อไร่</h4>
               </div>
             </div>
           </div>
