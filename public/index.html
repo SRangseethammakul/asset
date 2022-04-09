@@ -128,55 +128,31 @@
         let result = document.getElementById("result");
         result.classList.remove("d-none");
         let htmeResult = `
-          <div class="container resultSum">
-            <hr />
-            <div class="row">
-              <div class="col-2">
-                <h4>ราคารวม</h4>
-              </div>
-              <div class="col-6">
-                <h4>${calculatePrice}</h4>
-              </div>
-              <div class="col-4">
-                <h4>บาท</h4>
-              </div>
-            </div>
-            <hr />
-            <div class="row">
-              <div class="col-2">
-                <h4>ขนาด</h4>
-              </div>
-              <div class="col-6">
-                <h4>${summaryVaa}</h4>
-              </div>
-              <div class="col-4">
-                <h4>ตารางวา</h4>
-              </div>
-            </div>
-            <hr />
-            <div class="row">
-              <div class="col-2">
-                <h4>ราคาเฉลี่ย</h4>
-              </div>
-              <div class="col-6">
-                <h4>${priceAvg}</h4>
-              </div>
-              <div class="col-4">
-                <h4>บาทต่อตารางวา</h4>
-              </div>
-            </div>
-            <hr />
-            <div class="row">
-              <div class="col-2">
-                <h4>ราคาเฉลี่ย</h4>
-              </div>
-              <div class="col-6">
-                <h4>${pricePerRai}</h4>
-              </div>
-              <div class="col-4">
-                <h4>บาทต่อไร่</h4>
-              </div>
-            </div>
+          <div class="container resultSum table-responsive">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th scope="row">ราคารวม</th>
+                  <td class="text-end">${calculatePrice}</td>
+                  <td>บาท</td>
+                </tr>
+                <tr>
+                  <th scope="row">ขนาด</th>
+                  <td class="text-end">${summaryVaa}</td>
+                  <td>ตารางวา</td>
+                </tr>
+                <tr>
+                  <th scope="row">ราคาเฉลี่ย</th>
+                  <td class="text-end">${priceAvg}</td>
+                  <td>บาท / ตร.ว.</td>
+                </tr>
+                <tr>
+                  <th scope="row">ราคาเฉลี่ย</th>
+                  <td class="text-end">${pricePerRai}</td>
+                  <td>บาท / ไร่</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         `
         document.getElementById("result").innerHTML += htmeResult;
