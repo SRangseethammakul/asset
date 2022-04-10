@@ -18,9 +18,9 @@
     <div class="container mt-4">
       <div class="row">
         <div class="col">
-          <input class="form-control form-control-lg" type="number" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" id="rai" placeholder="ไร่" aria-label="ไร่">
-          <input class="form-control form-control-lg mt-2" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" max="4" id="ngan" placeholder="งาน" aria-label="งาน">
-          <input class="form-control form-control-lg mt-2 mb-2" type="number" id="vaa" placeholder="ตารางวา" aria-label="ตารางวา">
+          <input class="form-control form-control-lg" value="0" type="number" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" id="rai" placeholder="ไร่" aria-label="ไร่">
+          <input class="form-control form-control-lg mt-2" value="0" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" max="4" id="ngan" placeholder="งาน" aria-label="งาน">
+          <input class="form-control form-control-lg mt-2 mb-2" value="0" pattern="[0-9.]*" type="number" id="vaa" placeholder="ตารางวา" aria-label="ตารางวา">
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="selectType1" checked value="1">
             <label class="form-check-label" for="selectType1">ราคาต่อไร่</label>
@@ -29,7 +29,7 @@
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="selectType2" value="2">
             <label class="form-check-label" for="selectType2">ราคารวม</label>
           </div>
-          <input class="form-control form-control-lg mt-2 mb-2" inputmode="numeric" type="text" pattern="[0-9]*" id="price" placeholder="ราคา" aria-label="ราคา">
+          <input class="form-control form-control-lg mt-2 mb-2" value="0" inputmode="numeric" type="text" pattern="[0-9]*" id="price" placeholder="ราคา" aria-label="ราคา">
         </div>
       </div>
       <div id="buttonCalculate" class="d-grid gap-2 col-12 mx-auto mt-3">
