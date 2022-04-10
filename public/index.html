@@ -18,9 +18,12 @@
     <div class="container mt-4">
       <div class="row">
         <div class="col">
-          <input class="form-control form-control-lg" value="0" type="number" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" id="rai" placeholder="ไร่" aria-label="ไร่">
-          <input class="form-control form-control-lg mt-2" value="0" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" max="4" id="ngan" placeholder="งาน" aria-label="งาน">
-          <input class="form-control form-control-lg mt-2 mb-2" value="0" pattern="[0-9.]*" inputmode='decimal' type="number" id="vaa" placeholder="ตารางวา" aria-label="ตารางวา">
+          <label for="rai" class="form-label">ไร่</label>
+          <input class="form-control form-control-lg mb-3" value="0" type="number" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" id="rai" placeholder="ไร่" aria-label="ไร่">
+          <label for="ngan" class="form-label">งาน</label>
+          <input class="form-control form-control-lg mb-3" value="0" pattern="[0-9]*" onkeydown="if(event.key==='.'){event.preventDefault();}" inputmode="numeric"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" type="number" max="4" id="ngan" placeholder="งาน" aria-label="งาน">
+          <label for="vaa" class="form-label">ตารางวา</label>
+          <input class="form-control form-control-lg mb-2" value="0" pattern="[0-9.]*" inputmode='decimal' type="number" id="vaa" placeholder="ตารางวา" aria-label="ตารางวา">
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="selectType1" checked value="1">
             <label class="form-check-label" for="selectType1">ราคาต่อไร่</label>
@@ -29,7 +32,9 @@
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="selectType2" value="2">
             <label class="form-check-label" for="selectType2">ราคารวม</label>
           </div>
-          <input class="form-control form-control-lg mt-2 mb-2" value="0" inputmode="numeric" type="text" pattern="[0-9]*" id="price" placeholder="ราคา" aria-label="ราคา">
+          <br />
+          <label for="price" class="form-label mt-3">ราคา</label>
+          <input class="form-control form-control-lg mb-2" value="0" inputmode="numeric" type="text" pattern="[0-9]*" id="price" placeholder="ราคา" aria-label="ราคา">
         </div>
       </div>
       <div id="buttonCalculate" class="d-grid gap-2 col-12 mx-auto mt-3">
@@ -157,9 +162,23 @@
         `
         document.getElementById("result").innerHTML += htmeResult;
       }
+      const checkValue = (event) => {
+        const {value} = event.target;
+        if(value == 0){
+          event.target.value = '';
+          return 0;
+        }
+        return 1;
+      }
       const run = () => {
         const price = document.getElementById("price");
         const vaa = document.getElementById("vaa");
+        const rai = document.getElementById("rai");
+        const ngan = document.getElementById("ngan");
+        price.addEventListener("click", checkValue);
+        vaa.addEventListener("click", checkValue);
+        rai.addEventListener("click", checkValue);
+        ngan.addEventListener("click", checkValue);
         price.addEventListener("input", addcomma);
         vaa.addEventListener("keypress", isNumberKey);
         console.log(document.URL);

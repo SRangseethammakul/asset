@@ -20,7 +20,7 @@ exports.index = async (req, res, next) => {
 exports.calculatePerSize = async (req, res, next) => {
   try {
     const { rai, ngan, vaa, price } = req.body;
-    let summaryVaa =
+    let summaryVaa =ß
       Number(rai) * raiToVaa + Number(ngan) * nganToVaa + Number(vaa);
     let avgPrice = ((Number(price) / summaryVaa) * raiToVaa).toFixed(2);
     let priceAvg = (avgPrice / raiToVaa).toFixed(2);
@@ -29,7 +29,7 @@ exports.calculatePerSize = async (req, res, next) => {
     summaryVaa = await setNumberformatWithComma(parseInt(summaryVaa).toFixed(2));
     newPrice = await setNumberformatWithComma(parseInt(price).toFixed(2));
 
-    res.status(200).json({ calculatePrice: newPrice, summaryVaa, priceAvg, pricePerRai :avgPrice });
+    res.status(200).json({ calculatePrice: newPrice, summaryVaa, priceAvg, pricePerRai: avgPrice });
   } catch (error) {
     next(error);
   }
