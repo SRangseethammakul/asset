@@ -119,14 +119,14 @@
           ngan.focus();
           return 0;
         }
-        if(vaa.value > 99.99){
-          Swal.fire({
-            icon: 'warning',
-            title: "จำนวนตารางวา ต้องไม่เกิน 99.99",
-          });
-          vaa.focus();
-          return 0;
-        }
+        // if(vaa.value > 99.99){
+        //   Swal.fire({
+        //     icon: 'warning',
+        //     title: "จำนวนตารางวา ต้องไม่เกิน 99.99",
+        //   });
+        //   vaa.focus();
+        //   return 0;
+        // }
         let newPrice = price.value.replace(/,/g, '');
         let {calculatePrice, summaryVaa, priceAvg, pricePerRai} = await callCalculate(rai.value, ngan.value, vaa.value, newPrice, type.checked);
         let buttonCalculate = document.getElementById("buttonCalculate");

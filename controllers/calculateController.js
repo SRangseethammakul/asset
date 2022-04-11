@@ -20,7 +20,7 @@ exports.index = async (req, res, next) => {
 exports.calculatePerSize = async (req, res, next) => {
   try {
     const { rai, ngan, vaa, price } = req.body;
-    let summaryVaa =ß
+    let summaryVaa =
       Number(rai) * raiToVaa + Number(ngan) * nganToVaa + Number(vaa);
     let avgPrice = ((Number(price) / summaryVaa) * raiToVaa).toFixed(2);
     let priceAvg = (avgPrice / raiToVaa).toFixed(2);
