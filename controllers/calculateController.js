@@ -10,9 +10,16 @@ exports.index = async (req, res, next) => {
     let priceAvg = (price / raiToVaa).toFixed(2);
     sumPrice = await setNumberformatWithComma(sumPrice);
     priceAvg = await setNumberformatWithComma(priceAvg);
-    summaryVaa = await setNumberformatWithComma(parseInt(summaryVaa).toFixed(2));
+    summaryVaa = await setNumberformatWithComma(
+      parseInt(summaryVaa).toFixed(2)
+    );
     pricePerRai = await setNumberformatWithComma(parseInt(price).toFixed(2));
-    res.status(200).json({ calculatePrice: sumPrice, summaryVaa, priceAvg, pricePerRai: pricePerRai });
+    res.status(200).json({
+      calculatePrice: sumPrice,
+      summaryVaa,
+      priceAvg,
+      pricePerRai: pricePerRai,
+    });
   } catch (error) {
     next(error);
   }
@@ -26,11 +33,43 @@ exports.calculatePerSize = async (req, res, next) => {
     let priceAvg = (avgPrice / raiToVaa).toFixed(2);
     avgPrice = await setNumberformatWithComma(avgPrice);
     priceAvg = await setNumberformatWithComma(priceAvg);
-    summaryVaa = await setNumberformatWithComma(parseInt(summaryVaa).toFixed(2));
+    summaryVaa = await setNumberformatWithComma(
+      parseInt(summaryVaa).toFixed(2)
+    );
     newPrice = await setNumberformatWithComma(parseInt(price).toFixed(2));
 
-    res.status(200).json({ calculatePrice: newPrice, summaryVaa, priceAvg, pricePerRai: avgPrice });
+    res.status(200).json({
+      calculatePrice: newPrice,
+      summaryVaa,
+      priceAvg,
+      pricePerRai: avgPrice,
+    });
   } catch (error) {
     next(error);
   }
 };
+exports.calculatePerVaa = async (req, res, next) => {
+  try {
+    const { rai, ngan, vaa, price } = req.body;
+    let summaryVaa =
+      Number(rai) * raiToVaa + Number(ngan) * nganToVaa + Number(vaa);
+    let sumPrice = (summaryVaa * Number(price)).toFixed(2);
+    let priceAvg = (avgPrice / raiToVaa).toFixed(2);
+    priceAvg = await setNumberformatWithComma(priceAvg);
+    res.status(200).json({
+      calculatePrice: sumPrice,
+      summaryVaa,
+      price,
+      pricePerRai: priceAvg,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/*
+ราคารวม = ช่อง ขนาด*ราคาต่อตารางวาที่ใส่เพิ่มมา
+ขนาด สูตรเดิม (ไร่*400+งาน*100+วา)
+ราคาเฉลี่ย/ตรว เอาราคาต่อ ตรว มาใส่เลย
+ราคาเฉลี่ย/ไร่ เอาช่องราคาต่อ ตรว *400
+*/

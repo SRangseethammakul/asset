@@ -42,6 +42,10 @@
           <input class="form-check-input" type="radio" name="inlineRadioOptions" id="selectType2" value="2">
           <label class="form-check-label" for="selectType2">ราคารวม</label>
         </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="selectType2" value="3">
+          <label class="form-check-label" for="selectType3">ราคา / ตร.ว.</label>
+        </div>
         <br />
         <label for="price" class="form-label mt-3">ราคา</label>
         <input class="form-control form-control-lg mb-2" value="0" inputmode="numeric" type="text" pattern="[0-9]*"
@@ -79,8 +83,23 @@
     const convertToInt = (event) => {
       console.log(event.charCode);
     }
-    const callCalculate = (rai, ngan, vaa, price, type = true) => {
-      let url = type == 1 ? `${document.URL}calculate/calculateperprice` : `${document.URL}calculate/calculatepersize`;
+    const callCalculate = (rai, ngan, vaa, price, type = "1") => {
+      let baseUrl = document.URL;
+      let url = '';
+      switch (type) {
+        case "1":
+          url = `${baseUrl}calculate/calculateperprice`
+          break;
+        case "2":
+          url = `${baseUrl}calculate/calculatepersize`
+          break;
+        case "3":
+          url = `${baseUrl}calculate/calculatepervaa`
+          break;
+        default:
+          url = `${baseUrl}calculate/calculateperprice`
+          break;
+      }
       return new Promise((resolve, reject) => {
         axios
           .post(
