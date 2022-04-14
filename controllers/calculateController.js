@@ -53,14 +53,17 @@ exports.calculatePerVaa = async (req, res, next) => {
     const { rai, ngan, vaa, price } = req.body;
     let summaryVaa =
       Number(rai) * raiToVaa + Number(ngan) * nganToVaa + Number(vaa);
+    summaryVaa = await setNumberformatWithComma(summaryVaa);
     let sumPrice = (summaryVaa * Number(price)).toFixed(2);
-    let priceAvg = (avgPrice / raiToVaa).toFixed(2);
-    priceAvg = await setNumberformatWithComma(priceAvg);
+    sumPrice = await setNumberformatWithComma(sumPrice);
+    let pricePerRai = (Number(price) * raiToVaa).toFixed(2);
+    pricePerRai = await setNumberformatWithComma(pricePerRai);
+    let priceVaa = await setNumberformatWithComma(price);
     res.status(200).json({
       calculatePrice: sumPrice,
       summaryVaa,
-      price,
-      pricePerRai: priceAvg,
+      priceAvg: priceVaa,
+      pricePerRai: pricePerRai,
     });
   } catch (error) {
     next(error);
@@ -68,8 +71,16 @@ exports.calculatePerVaa = async (req, res, next) => {
 };
 
 /*
-ราคารวม = ช่อง ขนาด*ราคาต่อตารางวาที่ใส่เพิ่มมา
-ขนาด สูตรเดิม (ไร่*400+งาน*100+วา)
-ราคาเฉลี่ย/ตรว เอาราคาต่อ ตรว มาใส่เลย
-ราคาเฉลี่ย/ไร่ เอาช่องราคาต่อ ตรว *400
+ตรง option มันควรอยู่เป็น บรรทัดเดียวกันนะ 
+1. ราคา/ไร่
+2. ราคารวม
+3. ราคา/ตร.ว.
+
+ราคารวมผิดนะ ต้องเป็น 2000*250 = *500,000* 
+
+ราคาเฉลี่ย ต้องเป็น 2000
+
+ราคาเฉลี่ยต่อไร่ ต้องเป็น 2000*400 = *800,000* 
+
+ราคา/ไร่  ราคารวม  ราคา/ตร.ว.
 */
