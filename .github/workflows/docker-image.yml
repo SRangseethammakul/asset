@@ -8,7 +8,7 @@ on:
 
 env:
   REGISTRY: ${{ secrets.DOCKER_USER }}
-  IMAGE_NAME: "checkcoupon"
+  IMAGE_NAME: "asset"
 
 jobs:
   build:
