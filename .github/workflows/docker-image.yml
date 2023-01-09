@@ -2,17 +2,54 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+
+env:
+  REGISTRY: ${{ secrets.DOCKER_USER }}
+  IMAGE_NAME: "checkcoupon"
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - uses: actions/checkout@v3
+      - name: docker login
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: "Create env file"
+        run: |
+          cp .env.example .env
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USER }}/$(echo $IMAGE_NAME) --tag ${{ secrets.DOCKER_USER }}/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
+      - name: Docker push with tag
+        run: docker push ${{ secrets.DOCKER_USER }}/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
+      - name: Docker push
+        run: docker push ${{ secrets.DOCKER_USER }}/$(echo $IMAGE_NAME)
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@v0.1.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: 22
+          key: ${{ secrets.SSHKEY }}
+          envs: IMAGE_NAME,{{ secrets.DOCKER_PASSWORD }},{{ secrets.DOCKER_USER }},GITHUB_SHA
+          script: |
+            # Login to registry
+            docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+            # Stop running container
+            docker stop $(echo $IMAGE_NAME)
+            # Remove old container
+            docker rm $(echo $IMAGE_NAME)
+            # Run a new container from a new image
+            docker run -d \
+            -p 4020:3000 \
+            --restart always \
+            --name $(echo $IMAGE_NAME) \
+            ${{ secrets.DOCKER_USER }}/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
